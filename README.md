@@ -1,157 +1,68 @@
-# deep-learning-challenge
+# Deep Learning Challenge — Charity Funding Predictor
 
-### Background
+## Overview
+A binary classification model built with TensorFlow and Keras to predict whether 
+applicants funded by Alphabet Soup, a nonprofit foundation, will use their funding 
+successfully. The model was trained on metadata from more than 34,000 previously 
+funded organizations.
 
-The nonprofit foundation Alphabet Soup wants a tool that can help it select the applicants for funding with the best chance of success in their ventures. With your knowledge of machine learning and neural networks, you’ll use the features in the provided dataset to create a binary classifier that can predict whether applicants will be successful if funded by Alphabet Soup.
+---
 
-From Alphabet Soup’s business team, you have received a CSV containing more than 34,000 organizations that have received funding from Alphabet Soup over the years. 
+## Results
 
-Within this dataset are a number of columns that capture metadata about each organization, such as:
-- EIN and NAME—Identification columns
-- APPLICATION_TYPE—Alphabet Soup application type
-- AFFILIATION—Affiliated sector of industry
-- CLASSIFICATION—Government organization classification
-- USE_CASE—Use case for funding
-- ORGANIZATION—Organization type
-- STATUS—Active status
-- INCOME_AMT—Income classification
-- SPECIAL_CONSIDERATIONS—Special considerations for application
-- ASK_AMT—Funding amount requested
-- IS_SUCCESSFUL—Was the money used effectively
+### Data Preprocessing
+- **Target variable:** `IS_SUCCESSFUL` — whether funding was used effectively
+- **Features used:** Application type, classification, funding amount requested, 
+  use case, organization type, and income classification
+- **Removed:** `EIN` and `NAME` columns (identifiers with no predictive value)
 
+### Model Architecture
+The optimized model uses four hidden layers with dropout regularization:
 
-### Before You Begin
+| Layer | Neurons | Activation |
+|-------|---------|------------|
+| Hidden 1 | 200 | ReLU |
+| Hidden 2 | 150 | Tanh |
+| Hidden 3 | 100 | ReLU |
+| Hidden 4 | 50 | ReLU |
+| Output | 1 | Sigmoid |
 
-- Create a new repository for this project called deep-learning-challenge. Do not add this Challenge to an existing repository.
-- Clone the new repository to your computer.
-- Inside your local git repository, create a directory for the Deep Learning Challenge.
-- Push the above changes to GitHub.
+Dropout rates of 0.4, 0.3, and 0.2 were applied after the first three hidden layers 
+to reduce overfitting.
 
-### Instructions
+### Optimization Steps
+- Rare categorical values in `APPLICATION_TYPE` and `CLASSIFICATION` were binned 
+  into an `Other` category to reduce noise
+- Neuron count and layer depth were increased iteratively
+- Mixed activation functions (ReLU and Tanh) were tested across layers
+- Early stopping was implemented to halt training when validation accuracy plateaued
 
-### Step 1: Preprocess the Data
+---
 
-Using your knowledge of Pandas and scikit-learn’s StandardScaler(), you’ll need to preprocess the dataset. This step prepares you for Step 2, where you'll compile, train, and evaluate the neural network model.
+## Tech Stack
+- Python (Pandas, Scikit-learn, TensorFlow/Keras)
+- Google Colab
+- Jupyter Notebook
 
-Start by uploading the starter file to Google Colab, then using the information we provided in the Challenge files, follow the instructions to complete the preprocessing steps.
-- Read in the charity_data.csv to a Pandas DataFrame, and be sure to identify the following in your dataset:
-    - What variable(s) are the target(s) for your model?
-    - What variable(s) are the feature(s) for your model?
-- Drop the EIN and NAME columns.
-- Determine the number of unique values for each column.
-- For columns that have more than 10 unique values, determine the number of data points for each unique value.
-- Use the number of data points for each unique value to pick a cutoff point to combine "rare" categorical variables together in a new value, Other, and then check if the replacement was successful.
-- Use pd.get_dummies() to encode categorical variables.
-- Split the preprocessed data into a features array, X, and a target array, y. Use these arrays and the train_test_split function to split the data into training and testing datasets.
-- Scale the training and testing features datasets by creating a StandardScaler instance, fitting it to the training data, then using the transform function.
+---
 
-### Step 2: Compile, Train, and Evaluate the Model
+## Repository Contents
+| File | Description |
+|------|-------------|
+| `AlphabetSoupCharity.ipynb` | Base model notebook |
+| `AlphabetSoupCharity_Optimization.ipynb` | Optimized model notebook |
+| `AlphabetSoupCharity.h5` | Saved base model weights |
+| `AlphabetSoupCharity_Optimization.h5` | Saved optimized model weights |
 
-Using your knowledge of TensorFlow, you’ll design a neural network, or deep learning model, to create a binary classification model that can predict if an Alphabet Soup-funded organization will be successful based on the features in the dataset. You’ll need to think about how many inputs there are before determining the number of neurons and layers in your model. Once you’ve completed that step, you’ll compile, train, and evaluate your binary classification model to calculate the model’s loss and accuracy.
-- Continue using the file in Google Colab in which you performed the preprocessing steps from Step 1.
-- Create a neural network model by assigning the number of input features and nodes for each layer using TensorFlow and Keras.
-- Create the first hidden layer and choose an appropriate activation function.
-- If necessary, add a second hidden layer with an appropriate activation function.
-- Create an output layer with an appropriate activation function.
-- Check the structure of the model.
-- Compile and train the model.
-- Create a callback that saves the model's weights every five epochs.
-- Evaluate the model using the test data to determine the loss and accuracy.
-- Save and export your results to an HDF5 file. Name the file AlphabetSoupCharity.h5.
+---
 
-### Step 3: Optimize the Model
+## Future Improvements
+Tree-based models such as Random Forest, Gradient Boosting, or XGBoost may offer 
+comparable accuracy with greater interpretability, particularly for understanding 
+which features most influence funding success.
 
-Using your knowledge of TensorFlow, optimize your model to achieve a target predictive accuracy higher than 75%.
-Use any or all of the following methods to optimize your model:
-- Adjust the input data to ensure that no variables or outliers are causing confusion in the model, such as:
-    -Dropping more or fewer columns.
-    - Creating more bins for rare occurrences in columns.
-    - Increasing or decreasing the number of values for each bin.
-    - Add more neurons to a hidden layer.
-    - Add more hidden layers.
-    - Use different activation functions for the hidden layers.
-    - Add or reduce the number of epochs to the training regimen.
+---
 
-Note: If you make at least three attempts at optimizing your model, you will not lose points if your model does not achieve target performance.
-- Create a new Google Colab file and name it AlphabetSoupCharity_Optimization.ipynb.
-- Import your dependencies and read in the charity_data.csv to a Pandas DataFrame.
-- Preprocess the dataset as you did in Step 1. Be sure to adjust for any modifications that came out of optimizing the model.
-- Design a neural network model, and be sure to adjust for modifications that will optimize the model to achieve higher than 75% accuracy.
-- Save and export your results to an HDF5 file. Name the file AlphabetSoupCharity_Optimization.h5.
-
-### Step 4: Write a Report on the Neural Network Model
-
-For this part of the assignment, you’ll write a report on the performance of the deep learning model you created for Alphabet Soup.
-
-The report should contain the following:
-- Overview of the analysis: Explain the purpose of this analysis.
-- Results: Using bulleted lists and images to support your answers, address the following questions:
-    - Data Preprocessing
-        - What variable(s) are the target(s) for your model?
-        - What variable(s) are the features for your model?
-        - What variable(s) should be removed from the input data because they are neither targets nor features?
-    - Compiling, Training, and Evaluating the Model.
-        - How many neurons, layers, and activation functions did you select for your neural network model, and why?
-        - Were you able to achieve the target model performance?
-        - What steps did you take in your attempts to increase model performance?
--Summary: Summarize the overall results of the deep learning model. Include a recommendation for how a different model could solve this classification problem, and then explain your recommendation.
-
-### Step 5: Copy Files Into Your Repository
-
-Now that you're finished with your analysis in Google Colab, you need to get your files into your repository for final submission.
-- Download your Colab notebooks to your computer.
-- Move them into your Deep Learning Challenge directory in your local repository.
-- Push the added files to GitHub.
-
-
-# Overview of the Analysis
-The purpose of this analysis is to build a deep learning model using a neural network to predict whether applicants for Alphabet Soup, a charity funding organization, will be successful in securing funding. By analyzing various features of the dataset, such as application types, classification types, and organizational characteristics, the goal is to create a model that can accurately classify applicants as either successful or unsuccessful in obtaining funding.
-
-### Results
-Data Preprocessing
-
-* Target Variable(s):
-    - The target variable for this model is IS_SUCCESSFUL, which indicates whether the funding was successful (1) or unsuccessful (0).
-* Feature Variable(s):
-    - The features for the model include all other variables except for the target and unnecessary ID columns. The important features   include:
-        - APPLICATION_TYPE
-        - CLASSIFICATION
-        - ASK_AMT
-        - USE_CASE
-        - ORGANIZATION
-        - INCOME_AMT_
-* Removed Variables:
-The variables EIN and NAME were removed from the input data. These columns serve as identifiers and do not contribute to the predictive ability of the model, as they don't contain useful information for predicting the success of funding applications.
-
-### Compiling, Training, and Evaluating the Model
-
-* Neurons, Layers, and Activation Functions:
-    - The final optimized model consists of:
-        - Four hidden layers:
-        - First layer with 200 neurons and the relu activation function.
-        - Second layer with 150 neurons and the tanh activation function.
-        - Third layer with 100 neurons and the relu activation function.
-        - Fourth layer with 50 neurons and the relu activation function.
-        - Dropout layers were added after the first, second, and third hidden layers to prevent overfitting (with dropout rates of 0.4, 0.3, and 0.2, respectively).
-        - The output layer contains 1 neuron with a sigmoid activation function, appropriate for binary classification problems.
-
-    - These choices were made to balance the complexity of the model, enabling it to capture non-linear relationships between features while also preventing overfitting.
-### Model Performance:
-The target performance for this model was to achieve an accuracy greater than 75%. Through a series of optimizations, including adjusting the number of neurons, layers, activation functions, and implementing dropout layers, the final model achieved a test accuracy of X% (update based on actual result). This result is evaluated against the validation set and shows whether the model generalizes well to unseen data.
-
-### Steps Taken to Increase Model Performance:
-* Data Preprocessing: Grouped rare occurrences in categorical features (APPLICATION_TYPE and CLASSIFICATION) to reduce noise and improve model stability.
-* Neural Network Architecture: Increased the number of neurons and layers to capture more complex relationships in the data.
-* Activation Functions: Experimented with different activation functions (relu and tanh) to improve learning.
-* Dropout Layers: Added dropout layers to prevent overfitting and improve generalization.
-* Early Stopping: Implemented early stopping to monitor validation accuracy and prevent overfitting by stopping training when the model stopped improving.
-
-### Summary
-
-The neural network model developed for this problem provided reasonable accuracy in predicting whether an applicant would receive funding. However, the performance was dependent on careful tuning of the model architecture and hyperparameters. While the model reached an accuracy close to the target, further optimizations, such as grid search hyperparameter tuning or feature engineering, could improve performance even further.
-
-Recommendation for Future Improvements: While the deep learning model achieved decent results, a more explainable and interpretable model could be beneficial for understanding the factors that lead to successful funding applications. A recommendation is to explore the use of:
-* Random Forest Classifier or Gradient Boosting Machines (GBM), which are powerful tree-based algorithms that handle both linear and non-linear relationships and provide feature importance metrics, allowing us to better understand which features contribute most to funding success.
-* XGBoost could be another viable option due to its efficiency and accuracy in classification problems, particularly with tabular datasets like this one.
-
-By combining the insights from these alternative models with the neural network's results, a more accurate prediction system for funding success could be developed.
+## Data Source
+Dataset provided by Alphabet Soup containing funding application records 
+with organizational metadata and outcome labels.
