@@ -1,4 +1,4 @@
-# Deep Learning Challenge — Charity Funding Predictor
+# Charity Funding Predictor (Deep Learning Challenge)
 
 ## Overview
 A binary classification model built with TensorFlow and Keras to predict whether 
